@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  mysql:
+   image: mysql
+   container_name: mysql
+   environment:
+    - MYSQL_ROOT_PASSWORD=example
+    - MYSQL_DATABASE=users
+   restart: always
+  
+  web:
+   container_name: web
+   build:
+      context: .
+      dockerfile: Dockerfile
+   environment:
+    - SQL_HOST=mysql
+   ports:
+    - 5000:5000
+   depends_on:
+    - mysql
+   restart: always
+
