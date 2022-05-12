@@ -1,9 +1,13 @@
-from flask import Flask
+from pkg_resources import require
+from flask import Flask, request
 from flask_restful import Api, Resource, reqparse
 from flask_sqlalchemy import SQLAlchemy
 import mysql.connector
 from mysql.connector import Error
 
+users_put_args = reqparse.RequestParser()
+users_put_args.add_argument("username",type=str,help="username is required",required=True)
+users_put_args.add_argument("pwd",type=str,help="password is required", required=True)
 
 app = Flask(__name__)
 api = Api(app)
@@ -36,15 +40,20 @@ class User(Resource):
         try:
             if mydb.is_connected():
                 mycursor.execute("SELECT * FROM users")
-                record = mycursor.fetchone()
+                record = mycursor.fetchall()
                 return {"data": record }
         except Error as e:
             print("Error while connection to MySQL",e)
 
-    def post(self):
-        return {"data": "Posted"}
+    def put(self):
+        args = users_put_args.parse_args()
+        sql = "INSERT INTO users (name,pwd) VALUES (%s, %s)"
+        val = (args["username"], args["pwd"])
+        mycursor.execute(sql,val)
+        mydb.commit()
+        return {"user:" :args["username"] }, 201
 
-api.add_resource(User, "/")
+api.add_resource(User, "/users")
 
 if __name__ == "__main__":
 	app.run(debug=True, port=5001)
