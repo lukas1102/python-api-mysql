@@ -1,7 +1,7 @@
 from urllib import response
 import requests, json
 
-BASE = "http://localhost:5001/"
+BASE = "http://172.16.0.10/"
 
 data ={
     "username": "bill1",

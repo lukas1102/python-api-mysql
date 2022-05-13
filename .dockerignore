@@ -1,0 +1,3 @@
+#ignore git
+.git
+docker-compose.yml

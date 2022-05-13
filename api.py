@@ -67,6 +67,7 @@ class User(Resource):
                 return {"data": record }
         except Error as e:
             abort(500,"Error while connection to MySQL")
+        return {"data":"success"}
 
     def put(self):
         print("reached put method")
@@ -79,8 +80,9 @@ class User(Resource):
             return {"user:" :args["username"] }, 201
         except Error as e:
             abort(500,"Error while connection to MySQL")
+        return {"data":"success"}
 
-api.add_resource(User, "/users")
+api.add_resource(User, "/")
 
 if __name__ == "__main__":
-	app.run(debug=False, port=5000)
+	app.run(debug=False, port=5001, host='0.0.0.0')

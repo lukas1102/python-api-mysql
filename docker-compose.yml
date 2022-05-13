@@ -17,8 +17,7 @@ services:
    environment:
     - SQL_HOST=mysql
    ports:
-    - 5000:5000
+    - 5001:5001
    depends_on:
     - mysql
    restart: always
-

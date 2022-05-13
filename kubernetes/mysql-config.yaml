@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: mysql
+data:
+  mysql-host: mysql-service
+  mysql-database: users
+  mysql-root-pwd: example

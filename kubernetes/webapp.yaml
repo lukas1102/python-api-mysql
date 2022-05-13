@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+  namespace: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: luk7070/web-api:5
+        ports:
+        - containerPort: 5001
+        env:
+        - name: SQL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: mysql-host
+        - name: SQL_DB
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: mysql-database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+  namespace: mysql
+spec:
+  selector:
+    app: webapp
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
