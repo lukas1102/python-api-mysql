@@ -6,81 +6,97 @@ from mysql.connector import Error
 import os
 
 users_put_args = reqparse.RequestParser()
-users_put_args.add_argument("username",type=str,help="username is required",required=True)
-users_put_args.add_argument("pwd",type=str,help="password is required", required=True)
+users_put_args.add_argument("name1",type=str,help="username is required",required=True)
+users_put_args.add_argument("name2",type=str,help="password is required", required=True)
 
 app = Flask(__name__)
 api = Api(app)
 
-try:
-    if os.environ['SQL_HOST']:
-        hostname = os.environ['SQL_HOST']
-    else:
-        hostname = "127.0.0.1"
-except KeyError:
-    hostname = "127.0.0.1"
 
-try:
-    if os.environ['SQL_USER']:
-        usr = os.environ['SQL_USER']
-    else:
-        usr = "root"
-except KeyError:
-    usr = "root"
+class Mysql_Connection():
+    def __init__(self):
+        try:
+            if os.environ['SQL_HOST']:
+                hostname = os.environ['SQL_HOST']
+            else:
+                hostname = "127.0.0.1"
+        except KeyError:
+            hostname = "127.0.0.1"
 
-try:    
-    if os.environ['SQL_PWD']:
-        pwd = os.environ['SQL_PWD']
-    else:
-        pwd = "example"
-except KeyError:
-    pwd = "example"
+        try:
+            if os.environ['SQL_USER']:
+                usr = os.environ['SQL_USER']
+            else:
+                usr = "root"
+        except KeyError:
+            usr = "root"
 
-try:
-    if os.environ['SQL_DB']:
-        database = os.environ['SQL_DB']
-    else:
-        database = "users"
-except KeyError:
-    database = "users"
+        try:    
+            if os.environ['SQL_PWD']:
+                pwd = os.environ['SQL_PWD']
+            else:
+                pwd = "example"
+        except KeyError:
+            pwd = "example"
 
-mydb = mysql.connector.connect(
-            host = hostname,
-            user = usr,
-            password = pwd,
-            database = database
-)
-mycursor = mydb.cursor()
-mycursor.execute("SHOW TABLES")
-record = mycursor.fetchone()
-if record is None:
-    mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), pwd VARCHAR(255))")
+        try:
+            if os.environ['SQL_DB']:
+                database = os.environ['SQL_DB']
+            else:
+                database = "users"
+        except KeyError:
+            database = "users"
 
+        self.mydb = mysql.connector.connect(
+                    host = hostname,
+                    user = usr,
+                    password = pwd,
+                    database = database
+        )
+        self.mycursor = self.mydb.cursor()
+        self.mycursor.execute("SHOW TABLES")
+        record = self.mycursor.fetchone()
+        if record is None:
+            self.mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), pwd VARCHAR(255))")
+        
+    def connect_reading(self,Statement):
+        try:
+            if self.mydb.is_connected():
+                self.mycursor.execute(Statement)
+                record = self.mycursor.fetchall()
+                return record 
+            else:
+                abort(500, "something went wrong")
+        except Error as e:
+            abort(500,"Error while connection to MySQL",e)
+
+    def connect_writing(self,n1,n2):
+        try:
+            sql = "INSERT INTO users (name,pwd) VALUES (%s, %s)"
+            val = (n1, n2)
+            self.mycursor.execute(sql,val)
+            self.mydb.commit()
+        except Error as e:
+            abort(500,"Error while connection to MySQL")
 
 class User(Resource):
     def get(self):
         print("reached get method")
-        try:
-            if mydb.is_connected():
-                mycursor.execute("SELECT * FROM users")
-                record = mycursor.fetchall()
-                return {"data": record }
-        except Error as e:
-            abort(500,"Error while connection to MySQL")
-        return {"data":"success"}
+        sql = Mysql_Connection()
+        return {"data: ": sql.connect_reading("SELECT * FROM users") }
 
+        
     def put(self):
         print("reached put method")
+        sql = Mysql_Connection()
         try:
             args = users_put_args.parse_args()
-            sql = "INSERT INTO users (name,pwd) VALUES (%s, %s)"
-            val = (args["username"], args["pwd"])
-            mycursor.execute(sql,val)
-            mydb.commit()
-            return {"user:" :args["username"] }, 201
+            sql.connect_writing(args["name1"],args["name2"])
+            
+            return {"user:" :args["name1"] }, 201
         except Error as e:
             abort(500,"Error while connection to MySQL")
-        return {"data":"success"}
+        
 
 api.add_resource(User, "/")
 
