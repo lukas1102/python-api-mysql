@@ -39,8 +39,9 @@ mydb = mysql.connector.connect(
             host = hostname,
             user = usr,
             password = pwd,
-            database = "mysql"
+            database = db
 )
+
 try:
     mycursor = mydb.cursor()
 

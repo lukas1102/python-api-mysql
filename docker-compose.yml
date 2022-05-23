@@ -18,6 +18,8 @@ services:
     - SQL_HOST=mysql
    ports:
     - 5001:5001
+   volumes:
+    - .:/usr/src/app
    depends_on:
     - mysql
    restart: always

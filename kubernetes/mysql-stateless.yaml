@@ -43,9 +43,9 @@ spec:
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
-            configMapKeyRef:
-              name: mysql-config
-              key: mysql-root-pwd
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-root-password
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:

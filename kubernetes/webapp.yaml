@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: luk7070/web-api:5
+        image: luk7070/web-api:7.1
         ports:
         - containerPort: 5001
         env:
@@ -32,6 +32,11 @@ spec:
             configMapKeyRef:
               name: mysql-config
               key: mysql-database
+        - name: SQL_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: mysql-root-password
 ---
 apiVersion: v1
 kind: Service

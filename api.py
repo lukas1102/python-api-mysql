@@ -64,6 +64,7 @@ class Mysql_Connection():
             if self.mydb.is_connected():
                 self.mycursor.execute(Statement)
                 record = self.mycursor.fetchall()
+                self.mydb.close()
                 return record 
             else:
                 abort(500, "something went wrong")
@@ -76,6 +77,7 @@ class Mysql_Connection():
             val = (n1, n2)
             self.mycursor.execute(sql,val)
             self.mydb.commit()
+            self.mydb.close()
         except Error as e:
             abort(500,"Error while connection to MySQL")
 
@@ -97,8 +99,13 @@ class User(Resource):
         except Error as e:
             abort(500,"Error while connection to MySQL")
         
+class UserKV(Resource):
+    def get(self):
+        pass
+
 
 api.add_resource(User, "/")
+api.add_resource(UserKV, "/kv")
 
 if __name__ == "__main__":
 	app.run(debug=False, port=5001, host='0.0.0.0')

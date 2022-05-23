@@ -7,4 +7,3 @@ metadata:
 data:
   mysql-host: mysql-service
   mysql-database: users
-  mysql-root-pwd: example
