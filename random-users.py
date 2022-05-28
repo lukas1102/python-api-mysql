@@ -19,7 +19,7 @@ def sending(name):
         "name2": password
     })
 
-    print("sending username %s and password %s, %s" % (username,password, response))
+    #print("sending username %s and password %s, %s" % (username,password, response))
 
 def do_requests():
     names = json.loads(open('names.json').read())
@@ -28,7 +28,7 @@ def do_requests():
 
 threads = []
 
-num_threads = 1
+num_threads = 150
 
 for i in range(num_threads):
     t = threading.Thread(target=do_requests)
@@ -37,6 +37,8 @@ for i in range(num_threads):
 
 for i in range(num_threads):
     threads[i].start()
+
+print("started ...")
 
 for i in range(num_threads):
     threads[i].join()

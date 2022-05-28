@@ -54,10 +54,10 @@ class Mysql_Connection():
                     database = database
         )
         self.mycursor = self.mydb.cursor()
-        self.mycursor.execute("SHOW TABLES")
-        record = self.mycursor.fetchone()
-        if record is None:
-            self.mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), pwd VARCHAR(255))")
+        #self.mycursor.execute("SHOW TABLES")
+        #record = self.mycursor.fetchone()
+        #if record is None:
+        #    self.mycursor.execute("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), pwd VARCHAR(255))")
         
     def connect_reading(self,Statement):
         try:
@@ -76,6 +76,15 @@ class Mysql_Connection():
             sql = "INSERT INTO users (name,pwd) VALUES (%s, %s)"
             val = (n1, n2)
             self.mycursor.execute(sql,val)
+            sql = "SELECT id FROM users WHERE name=%s and pwd=%s"
+            self.mycursor.execute(sql,val)
+            record = self.mycursor.fetchall()
+
+            sql = "INSERT INTO invoice (user_id,creation_date) VALUES (%s, (SELECT current_timestamp))"
+            for x in record:
+                val = (x)
+                self.mycursor.execute(sql,val)
+            
             self.mydb.commit()
             self.mydb.close()
         except Error as e:

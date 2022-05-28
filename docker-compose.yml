@@ -4,22 +4,24 @@ services:
   mysql:
    image: mysql
    container_name: mysql
+   ports:
+    - 3306:3306
    environment:
     - MYSQL_ROOT_PASSWORD=example
     - MYSQL_DATABASE=users
    restart: always
   
-  web:
-   container_name: web
-   build:
-      context: .
-      dockerfile: Dockerfile
-   environment:
-    - SQL_HOST=mysql
-   ports:
-    - 5001:5001
-   volumes:
-    - .:/usr/src/app
-   depends_on:
-    - mysql
-   restart: always
+ # web:
+ #  container_name: web
+ #  build:
+ #     context: .
+ #     dockerfile: Dockerfile
+ #  environment:
+ #   - SQL_HOST=mysql
+ #  ports:
+ #   - 5001:5001
+ #  volumes:
+ #   - .:/usr/src/app
+ #  depends_on:
+ #   - mysql
+ #  restart: always
