@@ -112,9 +112,14 @@ class UserKV(Resource):
     def get(self):
         pass
 
+class UserStateless(Resource):
+    def get(self):
+        return {"data:": "stateless" }, 200
+
 
 api.add_resource(User, "/")
 api.add_resource(UserKV, "/kv")
+api.add_resource(UserStateless, "/stateless")
 
 if __name__ == "__main__":
 	app.run(debug=False, port=5001, host='0.0.0.0')

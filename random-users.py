@@ -5,7 +5,8 @@ chars = string.ascii_letters + string.digits + '!@#$%^&*()'
 random.seed = (os.urandom(1024))
 
 #url = 'http://localhost:5001/'
-url = 'http://77.237.53.201:8113/'
+#url = 'http://77.237.53.201:8113/'
+url = 'http://172.16.0.10/'
 
 
 def sending(name):
@@ -20,6 +21,7 @@ def sending(name):
     })
 
     #print("sending username %s and password %s, %s" % (username,password, response))
+    print(response)
 
 def do_requests():
     names = json.loads(open('names.json').read())
@@ -28,7 +30,7 @@ def do_requests():
 
 threads = []
 
-num_threads = 150
+num_threads = 1
 
 for i in range(num_threads):
     t = threading.Thread(target=do_requests)
