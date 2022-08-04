@@ -1,0 +1,47 @@
+---
+# Source: mysql-innodbcluster/templates/service_account_cluster.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mycluster-sa
+  namespace: mysql1
+---
+# Source: mysql-innodbcluster/templates/cluster_secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mycluster-cluster-secret
+  namespace: mysql1
+stringData:
+  rootUser: root
+  rootHost: "%"
+  rootPassword: "ZXhhbXBsZQ=="
+---
+apiVersion: mysql.oracle.com/v2
+kind: InnoDBCluster
+metadata:
+  name: mycluster
+  namespace: mysql1
+spec:
+  secretName: mycluster-cluster-secret
+  tlsUseSelfSigned: true
+  instances: 3
+  version: 8.0.29
+  router:
+    instances: 1
+    version: 8.0.29
+  datadirVolumeClaimTemplate:
+    accessModes: 
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  initDB:
+    clone:
+      donorUrl: mycluster-0.mycluster-instances.another.svc.cluster.local:3306
+      rootUser: root
+      secretKeyRef:
+        name: mycluster-cluster-secret
+  mycnf: |
+    [mysqld]
+    max_connections=162

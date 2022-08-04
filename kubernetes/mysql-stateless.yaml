@@ -5,7 +5,7 @@ metadata:
   name: mysql-pv-claim
   namespace: mysql
 spec:
-  storageClassName: nfs-client
+  storageClassName: rook-ceph-block
   accessModes:
     - ReadWriteOnce
   resources:

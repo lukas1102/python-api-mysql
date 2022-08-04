@@ -40,7 +40,7 @@ spec:
       name: mysql-store
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: "nfs-client"
+      storageClassName: "rook-cephfs"
       resources:
         requests:
           storage: 1Gi

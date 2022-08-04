@@ -5,5 +5,5 @@ metadata:
   name: mysql-config
   namespace: mysql
 data:
-  mysql-host: mysql-service
+  mysql-host: mycluster
   mysql-database: users
