@@ -94,7 +94,7 @@ class User(Resource):
     def get(self):
         print("reached get method")
         sql = Mysql_Connection()
-        return {"data: ": sql.connect_reading("SELECT * FROM users") }
+        return {"data: ": sql.connect_reading("SELECT * FROM users") }, 200
 
         
     def put(self):
@@ -108,9 +108,10 @@ class User(Resource):
         except Error as e:
             abort(500,"Error while connection to MySQL")
         
-class UserKV(Resource):
+class UserOne(Resource):
     def get(self):
-        pass
+        sql = Mysql_Connection()
+        return {"data: ": sql.connect_reading("SELECT * FROM users ORDER BY RANDOM() LIMIT 1") }, 200
 
 class UserStateless(Resource):
     def get(self):
@@ -118,7 +119,7 @@ class UserStateless(Resource):
 
 
 api.add_resource(User, "/")
-api.add_resource(UserKV, "/kv")
+api.add_resource(UserOne, "/one")
 api.add_resource(UserStateless, "/stateless")
 
 if __name__ == "__main__":
