@@ -5,6 +5,6 @@ COPY . .
 #ENV SQL_USER="root"
 #ENV SQL_PWD="example"
 #ENV SQL_DB="users"
-CMD ["python","init.py"]
+#CMD ["python","init.py"]
 CMD ["python","api.py"]
 EXPOSE 5000

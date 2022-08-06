@@ -111,7 +111,7 @@ class User(Resource):
 class UserOne(Resource):
     def get(self):
         sql = Mysql_Connection()
-        return {"data: ": sql.connect_reading("SELECT * FROM users ORDER BY RANDOM() LIMIT 1") }, 200
+        return {"data: ": sql.connect_reading("SELECT * FROM users ORDER BY RAND() LIMIT 1") }, 200
 
 class UserStateless(Resource):
     def get(self):
@@ -123,4 +123,4 @@ api.add_resource(UserOne, "/one")
 api.add_resource(UserStateless, "/stateless")
 
 if __name__ == "__main__":
-	app.run(debug=False, port=5001, host='0.0.0.0')
+	app.run(debug=True, port=5001, host='0.0.0.0')
