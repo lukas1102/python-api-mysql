@@ -9,24 +9,24 @@ random.seed = (os.urandom(1024))
 url = 'http://172.16.0.10/'
 
 
-def sending(name):
-    name_extra = ''.join(random.choice(string.digits))
-
-    username = name.lower() + name_extra + '@gmail.com'
-    password = ''.join(random.choice(chars) for i in range(8))
+def sending():
+    user = random.randint(0,3)
+    invoice = ''.join(str(random.randint(0,9)) for i in range(7))
+    price = random.randint(100,1000)
 
     response = requests.put(url, data={
-        "name1": username,
-        "name2": password
+        "name1": user,
+        "name2": invoice,
+        "name3": price
     })
 
     #print("sending username %s and password %s, %s" % (username,password, response))
     print(response)
 
 def do_requests():
-    names = json.loads(open('names.json').read())
+    #names = json.loads(open('names.json').read())
     while True:
-        sending(random.choice(names))
+        sending()
 
 threads = []
 

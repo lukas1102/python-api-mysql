@@ -31,15 +31,15 @@ try:
     if os.environ['SQL_DB']:
         db = os.environ['SQL_DB']
     else:
-        db = "users"
+        db = "invoices"
 except KeyError:
-    db = "users"
+    db = "invoices"
 
 mydb = mysql.connector.connect(
             host = hostname,
             user = usr,
             password = pwd,
-            database = "users"
+            database = "invoices"
 )
 
 try:
