@@ -71,19 +71,20 @@ class Mysql_Connection():
         except Error as e:
             abort(500,"Error while connection to MySQL",e)
 
-    def connect_writing(self,n1,n2):
+    def connect_writing(self,n1,n2,n3):
         try:
-            sql = "INSERT INTO users (name,pwd) VALUES (%s, %s)"
-            val = (n1, n2)
+            sql = "INSERT INTO invoice (invoice_id,user_id,creation_date,price) VALUES (%s,%s, (SELECT current_timestamp),%s)"
+            #sql = "INSERT INTO users (name,pwd) VALUES (%s, %s)"
+            val = (n1, n2, n3)
             self.mycursor.execute(sql,val)
-            sql = "SELECT id FROM users WHERE name=%s and pwd=%s"
-            self.mycursor.execute(sql,val)
-            record = self.mycursor.fetchall()
+            #sql = "SELECT id FROM users WHERE name=%s and pwd=%s"
+            #self.mycursor.execute(sql,val)
+            #record = self.mycursor.fetchall()
 
-            sql = "INSERT INTO invoice (user_id,creation_date) VALUES (%s, (SELECT current_timestamp))"
-            for x in record:
-                val = (x)
-                self.mycursor.execute(sql,val)
+            #sql = "INSERT INTO invoice (user_id,creation_date) VALUES (%s, (SELECT current_timestamp))"
+            #for x in record:
+            #    val = (x)
+            #    self.mycursor.execute(sql,val)
             
             self.mydb.commit()
             self.mydb.close()

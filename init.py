@@ -49,8 +49,8 @@ try:
         mycursor.execute("SHOW TABLES")
         record = mycursor.fetchall()
         if not record or record is None:
-            mycursor.execute("CREATE TABLE users (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), pwd VARCHAR(255))")
-            mycursor.execute("CREATE TABLE invoice (invoice_id BIGINT AUTO_INCREMENT, user_id BIGINT NOT null, creation_date TIMESTAMP not null, PRIMARY KEY(invoice_id), FOREIGN KEY(user_id) REFERENCES users(id))")
+            #mycursor.execute("CREATE TABLE users (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), pwd VARCHAR(255))")
+            mycursor.execute("CREATE TABLE invoice (invoice_id BIGINT , user_id BIGINT , creation_date TIMESTAMP not null, price INT, PRIMARY KEY(invoice_id,user_id))")
             mydb.commit()
             mydb.close()
             print("successful connection \n")

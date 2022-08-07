@@ -31,20 +31,20 @@ def do_write_requests(_file):
         response = sending_names(random.choice(names))
         lock1.acquire()
         f = open(_file,"a")
-        f.write(str(response.status_code) + "\n")
+        f.write(str(response.status_code) + " \n")
         f.close()
         lock1.release()
         time.sleep(0.01)
 
-def do_read_requests(_file):
+def do_read_requests(_file1):
     _url = url + "one"
     response = requests.get(_url)
     lock2.acquire()
-    f = open(_file,"a")
-    f.write(str(response.status_code) + "\n")
-    f.close()
+    f1 = open(_file1,"a")
+    f1.write(str(response.status_code) + " \n")
+    f1.close()
     lock2.release()
-    time.sleep(0.01)
+    time.sleep(0.001)
         
 threads = []
 
