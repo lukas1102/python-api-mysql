@@ -37,6 +37,9 @@ def do_write_requests(_file):
         f.close()
         lock1.release()
         time.sleep(0.1)
+        global stop_threads
+        if stop_threads:
+            break
 
 def do_read_requests(_file1,):
     while True:
@@ -48,12 +51,16 @@ def do_read_requests(_file1,):
         f1.close()
         lock2.release()
         time.sleep(0.1)
+        global stop_threads
+        if stop_threads:
+            break
 
         
 threads = []
 
 num_threads = 150
 
+stop_threads = False
 
 for i in range(num_threads):
     if i % 10 == 0:
@@ -68,7 +75,9 @@ for i in range(num_threads):
 
 print("started ...")
 
-input()
+time.sleep(40)
+
+stop_threads = True
 
 for i in range(num_threads):
     threads[i].join()
