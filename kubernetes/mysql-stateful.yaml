@@ -35,12 +35,16 @@ spec:
               configMapKeyRef:
                 name: mysql-config
                 key: mysql-database
+          - name: MYSQL_USER
+            value: test
+          - name: MYSQL_PASSWORD
+            value: test
   volumeClaimTemplates:
   - metadata:
       name: mysql-store
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: "rook-cephfs"
+      storageClassName: rook-ceph-block
       resources:
         requests:
           storage: 1Gi

@@ -10,16 +10,19 @@
 apiVersion: mysql.oracle.com/v2
 kind: InnoDBCluster
 metadata:
-  name: idc-with-custom-config
+  name: mycluster-pvc
   namespace: mysql
 spec:
   secretName: mypwds
   instances: 3
+  version: 8.0.29
   router:
     instances: 1
+    version: 8.0.29
   tlsUseSelfSigned: true
   datadirVolumeClaimTemplate:
+    storageClassName: rook-ceph-block
     accessModes: [ "ReadWriteOnce" ]
     resources:
       requests:
-        storage: 2Gi
+        storage: 3Gi

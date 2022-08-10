@@ -7,7 +7,7 @@ metadata:
     app: webapp
   namespace: mysql
 spec:
-  replicas: 5
+  replicas: 3
   selector:
     matchLabels:
       app: webapp
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: luk7070/web-api:8.3
+        image: luk7070/web-api:9.1
         ports:
         - containerPort: 5001
         env:
