@@ -1,4 +1,5 @@
 from asyncore import read
+from datetime import datetime
 import requests, json, os, random, string,  threading, time
 
 
@@ -30,10 +31,11 @@ def do_write_requests(_file):
     
     #names = json.loads(open('names.json').read())
     while True:
+        t = getTime()
         response = sending_names()
         lock1.acquire()
         f = open(_file,"a")
-        f.write(str(response.status_code) + " \n")
+        f.write(t + str(response.status_code) + " \n")
         f.close()
         lock1.release()
         time.sleep(0.1)
@@ -44,10 +46,11 @@ def do_write_requests(_file):
 def do_read_requests(_file1,):
     while True:
         _url = url + "one"
+        t = getTime()
         response = requests.get(_url)
         lock2.acquire()
         f1 = open(_file1,"a")
-        f1.write(str(response.status_code) + " \n")
+        f1.write(t + str(response.status_code) + " \n")
         f1.close()
         lock2.release()
         time.sleep(0.1)
@@ -55,10 +58,15 @@ def do_read_requests(_file1,):
         if stop_threads:
             break
 
-        
+def getTime():
+    now = datetime.now()
+    date = now.strftime("%y-%m-%d")
+    time = now.strftime("%H:%M:%S")
+    mili = int(now.microsecond / 1000)
+    return str(date) +  "," + str(time) + str(mili)+ ","
 threads = []
 
-num_threads = 150
+num_threads = 500
 
 stop_threads = False
 
