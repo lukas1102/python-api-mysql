@@ -1,5 +1,6 @@
 from asyncore import read
 from datetime import datetime
+from requests.models import Response
 import requests, json, os, random, string,  threading, time
 
 
@@ -19,14 +20,18 @@ def sending_names():
     user = random.randint(0,3)
     invoice = ''.join(str(random.randint(0,9)) for i in range(7))
     price = random.randint(100,1000)
-
-    r = requests.session()
-    response = r.put(url, data={
-        "name1": user,
-        "name2": invoice,
-        "name3": price
-    },timeout=1)
-    r.close()
+    try:
+        r = requests.session()
+        response = r.put(url, data={
+            "name1": user,
+            "name2": invoice,
+            "name3": price
+        })
+        r.close()
+    except:
+        fake_response = Response()
+        fake_response.status_code = 500
+        return(fake_response)
     return(response)
 
 def do_write_requests(_file):
@@ -49,9 +54,13 @@ def do_read_requests(_file1,):
     while True:
         _url = url + "one"
         t = getTime()
-        r = requests.session()
-        response = r.get(_url, timeout=1)
-        r.close()
+        try:
+            r = requests.session()
+            response = r.get(_url)
+            r.close()
+        except:
+            response = Response()
+            response.status_code = 500
         lock2.acquire()
         f1 = open(_file1,"a")
         f1.write(t + str(response.status_code) + " \n")
