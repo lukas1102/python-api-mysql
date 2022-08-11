@@ -1,4 +1,4 @@
-import requests, os, random, string, json, threading
+import requests, os, random, string, threading
 
 
 chars = string.ascii_letters + string.digits + '!@#$%^&*()'

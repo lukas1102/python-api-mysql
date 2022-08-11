@@ -61,7 +61,7 @@ def do_read_requests(_file1,):
 def getTime():
     now = datetime.now()
     date = now.strftime("%y-%m-%d")
-    time = now.strftime("%H:%M:%S")
+    time = now.strftime("%H:%M:%S:")
     mili = int(now.microsecond / 1000)
     return str(date) +  "," + str(time) + str(mili)+ ","
 threads = []
