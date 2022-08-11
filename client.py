@@ -20,11 +20,13 @@ def sending_names():
     invoice = ''.join(str(random.randint(0,9)) for i in range(7))
     price = random.randint(100,1000)
 
-    response = requests.put(url, data={
+    r = requests.session()
+    response = r.put(url, data={
         "name1": user,
         "name2": invoice,
         "name3": price
-    })
+    },timeout=1)
+    r.close()
     return(response)
 
 def do_write_requests(_file):
@@ -47,7 +49,9 @@ def do_read_requests(_file1,):
     while True:
         _url = url + "one"
         t = getTime()
-        response = requests.get(_url)
+        r = requests.session()
+        response = r.get(_url, timeout=1)
+        r.close()
         lock2.acquire()
         f1 = open(_file1,"a")
         f1.write(t + str(response.status_code) + " \n")
