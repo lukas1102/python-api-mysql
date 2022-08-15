@@ -1,0 +1,29 @@
+---
+# tasks file for vitess
+- name: install packages
+  apt:
+   name: "{{ item }}"
+   state: latest
+  with_items:
+    - libmysqlclient21
+
+- name: create directories
+  file:
+   path: "{{ item }}"
+   state: directory
+  with_items:
+   - "/usr/local/vitess/"
+
+#- name: download vitess
+#  get_url: 
+#   url: https://github.com/vitessio/vitess/releases/download/v{{ vitessVersion }}/vitess-{{ vitessVersion }}-{{ vitessVersionChecksum }}_amd64.deb
+#   dest: "/home/{{ user }}/vitess-{{ vitessVersion }}-{{ vitessVersionChecksum }}_amd64.deb"
+#   owner: "{{ user }}"
+#   group: "{{ user }}"
+
+- name: install vitess
+  apt:
+   deb: "{{ item }}"
+   state: present
+  with_items:
+    - https://github.com/vitessio/vitess/releases/download/v{{ vitessVersion }}/vitess_{{ vitessVersion }}-{{ vitessVersionChecksum }}_amd64.deb

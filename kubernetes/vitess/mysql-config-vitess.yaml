@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+data:
+  mysql-host: example-vtgate-ae7df4b6
+  mysql-database: invoices
+  mysql-user: vitess

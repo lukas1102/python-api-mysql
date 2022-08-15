@@ -1,0 +1,80 @@
+---
+# tasks file for haproxy
+- name: install packages
+  apt:
+   name: haproxy
+   state: latest
+
+- name: Copy haproxy config file
+  template:
+    src: "haproxy.cfg.j2"
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart haproxy
+
+- name: Ensure haproxy is started and enabled
+  service:
+    name: haproxy
+    state: started
+    enabled: yes
+
+- name: Download k8s signing key
+  ansible.builtin.apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add k8s repo
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes
+
+- name: Add an Apt signing key of helm
+  ansible.builtin.apt_key:
+    url: https://baltocdn.com/helm/signing.asc
+    state: present
+
+- name: Add helm repo
+  ansible.builtin.apt_repository:
+    repo: deb https://baltocdn.com/helm/stable/debian/ all main
+    state: present
+    filename: helm-stable-debian
+
+- name: install kubectl and helm package
+  apt:
+   name: "{{ item }}"
+   state: latest
+  with_items:
+    - kubectl
+    - helm
+
+- name: SNAT forwarding rule for internal network
+  iptables:
+   chain: POSTROUTING
+   table: nat
+   jump: SNAT
+   source: "{{ item }}"
+   to_source: 10.140.0.113
+   out_interface: ens18
+  with_items:
+   - 172.16.0.0/23
+
+- name: DNAT forwarding rule for the website
+  iptables:
+   chain: PREROUTING
+   table: nat
+   jump: DNAT
+   in_interface: ens18
+   protocol: tcp
+   destination_port: 80
+   to_destination: 172.16.0.10:80
+
+- name: add logrotation config for haproxy
+  copy:
+    src: haproxy
+    dest: /etc/logrotate.d/haproxy
+    owner: root
+    group: root
+  notify: restart logrotation

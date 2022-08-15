@@ -5,7 +5,6 @@ metadata:
   name: webapp-deployment
   labels:
     app: webapp
-  namespace: mysql
 spec:
   replicas: 3
   selector:
@@ -32,6 +31,11 @@ spec:
             configMapKeyRef:
               name: mysql-config
               key: mysql-database
+        - name: SQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config
+              key: mysql-user
         - name: SQL_PWD
           valueFrom:
             secretKeyRef:
@@ -47,7 +51,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: webapp-service
-  namespace: mysql
 spec:
   selector:
     app: webapp

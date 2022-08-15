@@ -1,0 +1,4 @@
+---
+# defaults file for nfs
+Path: /mnt/nfs
+Network: 192.168.0.1/24

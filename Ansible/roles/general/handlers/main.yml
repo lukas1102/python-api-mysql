@@ -1,0 +1,14 @@
+---
+# handlers file for general
+- name: restart ntp
+  service:
+   name: ntp
+   state: restarted
+
+- name: restart logrotation
+  service:
+   name: logrotate
+   state: "{{ item }}"
+  with_items:
+   - reloaded
+   - restarted

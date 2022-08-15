@@ -1,0 +1,14 @@
+---
+# handlers file for haproxy
+- name: restart haproxy
+  service:
+   name: haproxy
+   state: restarted
+
+- name: restart logrotation
+  service:
+   name: logrotate
+   state: "{{ item }}"
+  with_items:
+   - reloaded
+   - restarted

@@ -1,0 +1,16 @@
+---
+- name: testing variables
+  hosts: master
+  gather_facts: yes
+  become: yes
+
+  tasks:
+   - name: What is my inventory_hostname
+     debug: var={{inventory_hostname}}
+
+   - name: What is my ansible_hostname
+     debug: var={{ansible_hostname}}
+
+   - name: ansible hosts
+     debug: var={{groups['master'][1]}}
+

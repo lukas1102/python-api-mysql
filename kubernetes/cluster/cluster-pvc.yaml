@@ -21,8 +21,8 @@ spec:
     version: 8.0.29
   tlsUseSelfSigned: true
   datadirVolumeClaimTemplate:
-    storageClassName: rook-ceph-block
+    storageClassName: nfs-client
     accessModes: [ "ReadWriteOnce" ]
     resources:
       requests:
-        storage: 3Gi
+        storage: 2Gi

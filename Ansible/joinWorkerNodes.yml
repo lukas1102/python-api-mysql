@@ -1,0 +1,13 @@
+---
+- hosts: 172.16.0.11
+  
+  become: yes
+  become_user: kube
+
+  tasks:
+   - name: initialize the cluster
+     shell: kubeadm init --config=config.yaml --upload-certs
+     args:
+      chdir: $HOME
+      creates: cluster_initialized.txt
+   - name: 

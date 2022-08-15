@@ -1,0 +1,76 @@
+---
+# tasks file for master
+- name: create etcd dir
+  file:
+   path: "{{ item }}"
+   state: directory
+  with_items:
+   - "/etc/etcd"
+   - "/var/lib/etcd"
+
+- name: copy ca & kubernetes & kubernetes-key certificates
+  copy:
+   src: "{{ item.src }}"
+   dest: "{{ item.dest }}"
+   owner: kube
+   group: kube
+   mode: 0644
+  with_items:
+   - src: /home/lukas/ca/ca.pem
+     dest: /etc/etcd/ca.pem
+   - src: /home/lukas/ca/kubernetes.pem
+     dest: /etc/etcd/kubernetes.pem
+   - src: /home/lukas/ca/kubernetes-key.pem
+     dest: /etc/etcd/kubernetes-key.pem
+
+- name: download etcd
+  get_url:
+   url: https://github.com/etcd-io/etcd/releases/download/v3.5.2/etcd-v3.5.2-linux-amd64.tar.gz
+   dest: /home/kube/etcd.tar.gz
+   owner: kube
+   group: kube
+
+- name: unarchive the etcd file
+  ansible.builtin.unarchive:
+   src: /home/kube/etcd.tar.gz
+   dest: /home/kube/
+   remote_src: yes
+   owner: kube
+   group: kube
+
+- name: copy kubernetes-key certificates
+  copy:
+   src: "/home/kube/etcd-v3.5.2-linux-amd64/{{ item }}"
+   dest: /usr/local/bin/
+   remote_src: yes
+   owner: root
+   group: root
+   mode: 0755
+  with_items:
+   - etcd
+   - etcdctl
+   - etcdutl
+
+- name: Copy etcd service file
+  template:
+    src: "etcd.service.j2"
+    dest: /etc/systemd/system/etcd.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and check etcd service
+  systemd:
+    name: etcd
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  notify: restart etcd
+
+- name: Copy kubernetes config file
+  template:
+    src: "config.yaml.j2"
+    dest: /home/kube/config.yaml
+    owner: kube
+    group: kube
+    mode: 0644

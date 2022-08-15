@@ -1,0 +1,41 @@
+---
+- hosts: k8s_cluster
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: general
+    - role: k8s
+    - role: vitess
+
+- hosts: master
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: master
+
+- hosts: haproxy
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: general
+    - role: haproxy
+      vars:
+        IngressHttpNodePort: 32166
+        IngressHttpsNodePort: 30537
+    - role: vitess
+
+- hosts: nfs
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: general
+    - role: nfs
+      vars:
+        Path: /mnt/k8s_data
+        Network: 172.16.0.0/23
+
+- hosts: tikv
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: general

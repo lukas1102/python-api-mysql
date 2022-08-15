@@ -1,0 +1,36 @@
+---
+# tasks file for nfs
+- name: install nfs packages
+  apt:
+   name: "{{ item }}"
+   state: latest
+  with_items:
+    - nfs-kernel-server
+  
+- name: Ensure nfs server is started and enabled
+  service:
+    name: nfs-server
+    state: started
+    enabled: yes
+
+- name: create NFS directory share 
+  file:
+    path: "{{ Path }}"
+    state: directory
+    group: nogroup
+    owner: nobody
+    mode: 0777
+
+- name: add nfs configuration
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
+  register: permissions
+
+- name: export and provide the shared directory
+  shell:
+   cmd: exportfs -ra
+  when: permissions is changed

@@ -1,0 +1,7 @@
+---
+# defaults file for haproxy
+WebserverHttpPort: 80
+WebserverHttpsPort: 443
+IngressHttpNodePort: 30100
+IngressHttpsNodePort: 30101
+iperfNodePort: 31831

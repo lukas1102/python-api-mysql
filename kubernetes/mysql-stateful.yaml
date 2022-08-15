@@ -9,7 +9,7 @@ spec:
     matchLabels:
       app: mysql
   serviceName: mysql-service
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -44,10 +44,10 @@ spec:
       name: mysql-store
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: rook-ceph-block
+      storageClassName: nfs-client
       resources:
         requests:
-          storage: 1Gi
+          storage: 2Gi
 ---
 apiVersion: v1
 kind: Service

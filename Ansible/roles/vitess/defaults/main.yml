@@ -1,0 +1,5 @@
+---
+# defaults file for vitess
+vitessVersion: 14.0.1
+vitessVersionChecksum: 4c118cb
+user: lukas

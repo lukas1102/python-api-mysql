@@ -1,0 +1,88 @@
+---
+# tasks file for general
+- name: Update apt cache if needed
+  apt:
+   update_cache: yes
+   force_apt_get: yes
+   cache_valid_time: 3600
+
+- name: Update all packages
+  apt:
+   upgrade: yes
+   autoremove: yes
+
+- name: install packages
+  apt:
+   name: "{{ item }}"
+   state: latest
+  with_items:
+    - apt-transport-https
+    - curl
+    - ntp
+    - lsb-release
+
+- name: stopping firewall
+  service:
+   name: ufw
+   state: stopped
+   enabled: no
+
+- name: configure ntp server
+  ansible.builtin.copy:
+    src: ntp.conf
+    dest: /etc/ntp.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart ntp
+
+- name: add cron job for auto upgrade
+  cron:
+   name: "update all packages"
+   job:  "apt-get update -y && apt-get upgrade -y; echo \"$(date +%F:%H-%M-%S) successful upgrade\" >> /var/log/cron_upgrade.log"
+   user: root
+   special_time: daily
+
+- name: Copy hosts file
+  template:
+    src: "hosts.j2"
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+
+- name: allow 'lukas' to use sudo without needing a password
+  lineinfile:
+   dest: /etc/sudoers
+   line: 'lukas ALL=(ALL) NOPASSWD: ALL'
+   validate: 'visudo -cf %s'
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (1/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+  register: disable_swap
+
+- name: Disable SWAP since kubernetes can't work with swap enabled (2/2)
+  shell: |
+    swapoff -a
+  when: disable_swap is changed
+
+- name: Remove swap file
+  file:
+    path: /swap.img
+    state: absent
+
+- name: add logrotation config
+  copy:
+    src: logrotate.conf
+    dest: /etc/logrotate.conf 
+  notify: restart logrotation
+
+- name: add rsyslog config
+  copy:
+    src: rsyslog
+    dest: /etc/logrotate.d/rsyslog
+  notify: restart logrotation
+  

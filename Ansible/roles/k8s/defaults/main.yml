@@ -1,0 +1,4 @@
+---
+# defaults file for k8s
+vitessVersion: 12.0.4
+vitessVersionChecksum: c462e63

@@ -1,0 +1,21 @@
+---
+- hosts: k8s_cluster
+  gather_facts: yes
+  become: yes
+  
+  tasks:
+   - name: remove cni
+     file:
+      path: /etc/cni/net.d
+      state: absent
+
+   - name: remove etcd
+     file:
+      path: /var/lib/etcd
+      state: absent
+
+   - name: remove journal
+     file:
+      path: /var/log/journal
+      state: absent
+    
