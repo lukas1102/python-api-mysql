@@ -79,7 +79,7 @@ def getTime():
     return str(date) +  "," + str(time) + str(mili)+ ","
 threads = []
 
-num_threads = 500
+num_threads = 150
 
 stop_threads = False
 
@@ -96,7 +96,7 @@ for i in range(num_threads):
 
 print("started ...")
 
-time.sleep(40)
+time.sleep(720)
 
 stop_threads = True
 
