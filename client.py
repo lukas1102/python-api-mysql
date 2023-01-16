@@ -1,15 +1,15 @@
 from asyncore import read
 from datetime import datetime
 from requests.models import Response
-import requests, json, os, random, string,  threading, time
+import requests, json, os, random, string,  threading, time, sys
 
 
 #url = "http://77.237.53.201:8113/"
 #url = "http://localhost:5001/"
 url = "http://172.16.0.10/"
 
-file_write = "logs/write.log"
-file_read = "logs/read.log"
+file_write = "logs/write" + str(sys.argv[1]) + ".csv"
+file_read = "logs/read" + str(sys.argv[1]) + ".csv"
 lock1 = threading.Lock()
 lock2 = threading.Lock()
 
@@ -96,7 +96,7 @@ for i in range(num_threads):
 
 print("started ...")
 
-time.sleep(300)
+time.sleep(180)
 
 stop_threads = True
 
