@@ -33,20 +33,6 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 
-        frontend kubernetes
-        bind "{{ inventory_hostname }}":6443
-        option tcplog
-        mode tcp
-        default_backend kubernetes-master-nodes
-
-        backend kubernetes-master-nodes
-        mode tcp
-        balance roundrobin
-        option tcp-check
-{% for host in groups['master'] %}
-        server {{hostvars[host]['ansible_hostname']}} {{hostvars[host]['inventory_hostname']}}:6443 check fall 3 rise 2
-{% endfor %}
-
         frontend ws
         bind "{{ inventory_hostname }}":{{ WebserverHttpPort }}
         option tcplog

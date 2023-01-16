@@ -10,11 +10,12 @@
   apt:
    upgrade: yes
    autoremove: yes
+  when: upgrading is true
 
 - name: install packages
   apt:
    name: "{{ item }}"
-   state: latest
+   state: present
   with_items:
     - apt-transport-https
     - curl
@@ -42,6 +43,7 @@
    job:  "apt-get update -y && apt-get upgrade -y; echo \"$(date +%F:%H-%M-%S) successful upgrade\" >> /var/log/cron_upgrade.log"
    user: root
    special_time: daily
+   disabled: yes
 
 - name: Copy hosts file
   template:
@@ -85,4 +87,3 @@
     src: rsyslog
     dest: /etc/logrotate.d/rsyslog
   notify: restart logrotation
-  

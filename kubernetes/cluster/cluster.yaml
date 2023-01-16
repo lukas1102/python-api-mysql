@@ -19,6 +19,8 @@ metadata:
 spec:
   secretName: mypwds
   instances: 3
+  version: 8.0.31
   router:
     instances: 1
+    version: 8.0.31
   tlsUseSelfSigned: true

@@ -4,14 +4,10 @@
   become: yes
   roles:
     - role: general
+      vars:
+        upgrading: true
     - role: k8s
-    - role: vitess
-
-- hosts: master
-  gather_facts: yes
-  become: yes
-  roles:
-    - role: master
+    #- role: vitess
 
 - hosts: haproxy
   gather_facts: yes
@@ -20,9 +16,15 @@
     - role: general
     - role: haproxy
       vars:
-        IngressHttpNodePort: 32166
-        IngressHttpsNodePort: 30537
-    - role: vitess
+        IngressHttpNodePort: 31948
+        IngressHttpsNodePort: 31457
+    #- role: vitess
+
+#- hosts: master
+#  gather_facts: yes
+#  become: yes
+#  roles:
+#    - role: master
 
 - hosts: nfs
   gather_facts: yes

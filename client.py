@@ -96,7 +96,7 @@ for i in range(num_threads):
 
 print("started ...")
 
-time.sleep(720)
+time.sleep(300)
 
 stop_threads = True
 

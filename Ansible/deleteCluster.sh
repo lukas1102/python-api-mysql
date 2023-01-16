@@ -1,8 +1,10 @@
-kubectl delete node k8s-5 
-kubectl delete node k8s-4 
-kubectl delete node k8s-3 
-kubectl delete node k8s-2 
-kubectl delete node k8s-1
+kubectl delete node k8s6
+kubectl delete node k8s5 
+kubectl delete node k8s4 
+kubectl delete node k8s3 
+kubectl delete node k8s2 
+kubectl delete node k8s1
+ssh kube@172.16.0.16 "sudo kubeadm reset -f" &
 ssh kube@172.16.0.15 "sudo kubeadm reset -f" &
 ssh kube@172.16.0.14 "sudo kubeadm reset -f" &
 ssh kube@172.16.0.13 "sudo kubeadm reset -f" &

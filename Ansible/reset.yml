@@ -1,6 +1,6 @@
 ---
 - hosts: k8s_cluster
-  gather_facts: yes
+  gather_facts: no
   become: yes
   
   tasks:
@@ -18,4 +18,8 @@
      file:
       path: /var/log/journal
       state: absent
-    
+
+   - name: remove kube config
+     file:
+      path: /home/kube/.kube/config
+      state: absent

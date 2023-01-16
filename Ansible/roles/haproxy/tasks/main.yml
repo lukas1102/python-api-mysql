@@ -3,7 +3,7 @@
 - name: install packages
   apt:
    name: haproxy
-   state: latest
+   state: present
 
 - name: Copy haproxy config file
   template:
@@ -45,7 +45,7 @@
 - name: install kubectl and helm package
   apt:
    name: "{{ item }}"
-   state: latest
+   state: present
   with_items:
     - kubectl
     - helm

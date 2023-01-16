@@ -7,7 +7,7 @@ metadata:
     app: webapp
   namespace: mysql
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: webapp
@@ -39,9 +39,9 @@ spec:
               key: mysql-root-password
         resources:
           requests:
-            cpu: "64m"
-          limits:
             cpu: "128m"
+          limits:
+            cpu: "256m"
 ---
 apiVersion: v1
 kind: Service
@@ -60,6 +60,7 @@ spec:
 #kind: HorizontalPodAutoscaler
 #metadata:
 #  name: hpa-webapp
+#  namespace: mysql
 #spec:
 #  scaleTargetRef:
 #    apiVersion: apps/v1
